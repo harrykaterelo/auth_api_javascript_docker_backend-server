@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: node_app
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://harry:1234@mongo:27017/mydatabase?authSource=admin
+      - JWT_SECRET=f39f067d14711f81deea8a5ede689e79e7dd6efc1cc47e9524aeebf4d328ca25
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app/backend
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_container
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=harry
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=mydatabase
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge
