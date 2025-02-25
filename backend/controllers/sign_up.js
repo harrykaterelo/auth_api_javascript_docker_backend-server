@@ -1,4 +1,5 @@
 const UserCredentials = require("../database/models/userCredentialsModel");
+const signToken = require("../utils/sign_token");
 const verifyEmail = require("../utils/verify_email");
 const verifyPassword = require("../utils/verify_password");
 
@@ -23,7 +24,8 @@ try{
     const newUser = new UserCredentials({email:email,password:password,name:name});
     console.log('here 3');
     await newUser.save();
-    res.status(200).json({'message':'User created'});
+    const token  = await signToken(newUser._id);
+    res.status(200).json({'message':'User created','token':token});
 }
 catch(e){
     console.log('here'+e);

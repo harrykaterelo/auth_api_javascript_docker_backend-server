@@ -9,6 +9,8 @@ const signInController = signInUser;
 
 userRouterV1.post('/signUp',signUpController);
 
-userRouterV1.post('/signIn',signInController);
+userRouterV1.post('/signIn',(req,res)=>{
+    return signInController(req,res,req.method,req.url);
+});
 
 module.exports  = userRouterV1;
